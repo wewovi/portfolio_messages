@@ -29,18 +29,31 @@ app.post('/portfolioMessage', async(req, res)=>{
 
 app.get('/portfolioMessage', async(req, res)=>{
     try {
-        const getAllMessage = messageModel.find();
+       const getAllMessages = await messageModel.find();
+       res.json({
+           data:getAllMessages,
+           message:"operation sucessful"
+       })
+    } catch (err) {
         res.json({
-            data: getAllMessage,
-            message: 'messages successfully fetched'
-        }) 
-        
-    } catch (error) {
-        res.json({
-            message:error
+            message:err
         });
+        
     }
-    
+});
+app.delete('/portfolioMessage/:messageId', async(req, res)=>{
+    try{
+   const deleteMessage = await messageModel.findOneAndDelete({_id:req.params.messageId});
+   res.json({
+       data: deleteMessage,
+       message:"message successfully deleted"
+   })
+    }
+    catch(err){
+res.json({
+    message:err
+});
+    }
 });
 app.get('/',(req,res)=>{
     res.send('we are in the root folder');
